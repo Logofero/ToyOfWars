@@ -6,7 +6,7 @@ Credits      : Zamaroht - tool 'Zamaroht's TextDraw Editor'
  
 Description:   
  You have to fight in the toy car in the desert for one of the teams. 
- 
+
 Total teams:
  1 Red Team
  2 Green
