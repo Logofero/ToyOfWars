@@ -51,41 +51,41 @@ _You have to fight on a toy cars against other teams. Every team has its own col
 
 #### Units:
 
-* RCTiger         Tank
-* RCBandit       Car
-* RCRaider       Helicopter     
-* RCGoblin       Helicopter     
-* RCBaron        Airplane       
+* RCTiger        `Tank``
+* RCBandit       `Car`
+* RCRaider       `Helicopter`
+* RCGoblin       `Helicopter`
+* RCBaron        `Airplane`
 
 #### Cost:
 
-* Humen           +__50__ score
-* RCTiger         +__90__ score
-* RCBandit       +__70__ score
-* RCRaider       +__100__ score
-* RCGoblin       +__100__ score
-* RCBaron        +__120__ score
+* Humen           +`50` score
+* RCTiger         +`90` score
+* RCBandit       +`70` score
+* RCRaider       +`100` score
+* RCGoblin       +`100` score
+* RCBaron        +`120` score
  
 #### Health:
 
-* RCTiger         __1200__ hp
-* RCBandit       __900__ hp
-* RCRaider       __800__ hp
-* RCGoblin       __800__ hp
-* RCBaron        __700__ hp
+* RCTiger         `1200` hp
+* RCBandit       `900` hp
+* RCRaider       `800` hp
+* RCGoblin       `800` hp
+* RCBaron        `700` hp
 
 #### Max. Ammo:
 
-* RCTiger         __25__ bullets
-* RCBandit       __30__ bullets
-* RCRaider       __30__ bullets
-* RCGoblin       __30__ bullets
-* RCBaron        __20__ bullets
+* RCTiger         `25` bullets
+* RCBandit       `30` bullets
+* RCRaider       `30` bullets
+* RCGoblin       `30` bullets
+* RCBaron        `20` bullets
  
 #### Maps:
 
-* 1 Abandoned base v1
-* 2 Abandoned base v2
+* 1 Abandoned base `v1`
+* 2 Abandoned base `v2`
 
 #### Controls:
  * __Fire__ - _Shot of gun_
