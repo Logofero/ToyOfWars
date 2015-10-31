@@ -1,9 +1,18 @@
 /*
- * [include] RC Cars (OLD name 'RC Tiger Gun')
- * Version          : v4
+ * [include] RCCars
+ * Version          : v5
  * Release          : v1, 7 aug 2015
- * Update           : v4, 21 aug 2015
+ * Update           : v5, 31 oct 2015
  * Contributors     : VanillaRain, Nero_3D, Logofero aka fERO
+ * Credits          :
+ *      SA-MP Multyplayer http://forum.sa-mp.com/forumdisplay.php?f=74
+ *          SA-MP Team
+ *
+ *      Streamer http://forum.sa-mp.com/showthread.php?t=102865
+ *          Incognito
+ *
+ *      ColAndreas http://forum.sa-mp.com/showthread.php?t=586068
+ *          [uL]Slice, [uL]Chris420, [uL]Pottus, uint32, Crayder
  *
  * INSTALL:
  *      1) Copy file "rctigergun.inc" in folder "pawno/include"
@@ -13,20 +22,25 @@
  * CONTROL:
  *      FIRE        - Shot of RC gun
  *      ENTER       - Enter/Exit to/of RC Vehicle
- *
- * CHANGES:
- * v1, 7 aug 2015 Maked     : base of the script by VanillaRain
- * v2, 7 aug 2015 Edited    : fix minor bugs, mod saved as include by Logofero
- * v3, 8 aug 2015 Added     : optimized algorithm from Nero_3D. Builder by Logofero
- * v4, 21 aug 2015 Edited   : special update for gamemode 'Toy Of Wars' new functions by Logofero
  */
+#if defined _funcs_TW_rccars_included
+  #endinput
+#endif
+#define _funcs_TW_rccars_included
+#pragma library TW_rccars
 
 // Build v4 by Logofero
+#if defined SCR_SOURCE
+    #undef SCR_SOURCE
+#endif
+#define SCR_SOURCE                  "TW_rccars.inc"
+
 #define ENABLE_SHOT_RANDOM_COLOR    (0) // if you disabled (0) with projectiles do not change color
+#define ENABLE_COLANDREAS           (1) // on/off custom collision
 #define RCCAR_RANGE_ENTER           (1.2) // Enter range in tank. Added in v3
 #define RCCAR_RANGE_EXIT            (1.5) // Exit range in tank. Added in v3
 #define RCCAR_TIME_FIDE_ENTER       (500) // Freezing camera for enter in tank. Added in v3
-#define RC_HAS_GUN_MODELS           441,464,465,564,501 // Added for gamemode Toy of Wars
+#define RC_HAS_GUN_MODELS           441,464,465,564,501,594 // Added for gamemode Toy of Wars
 #define RC_TIME_CLEAR_DAMAGEID      (60000) // Time removal ID which caused damage to player
 
 // RC cars info ---------------------------------------------------
@@ -138,16 +152,26 @@ stock GetNeonModelOfTeamColorID(teamcolorid) {
 /*
  * native IsPlayerKeyPress(playerid, keycode);
  */
+#define KEY_W					KEY_UP + 1
+#define KEY_S				    KEY_DOWN + 1
+#define KEY_A				    KEY_LEFT + 2
+#define KEY_D				    KEY_RIGHT + 3
+
 stock IsPlayerKeyPress(playerid, keycode) {
     new key, updown, leftright;
     GetPlayerKeys(playerid, key, updown, leftright);
     //printf("PRESS player %d key %d updown %d leftright %d",playerid, key, updown, leftright);
-    if(key & keycode) return true;
-
-    else if(keycode == KEY_UP && updown == -128 && leftright == 0) return true;
-    else if(keycode == KEY_DOWN && updown == 128 && leftright == 0) return true;
-    else if(keycode == KEY_LEFT && updown == 0 && leftright == -128) return true;
-    else if(keycode == KEY_RIGHT && updown == 0 && leftright == 128) return true;
+    if(key & keycode) {
+        return true;
+    } else if(keycode == KEY_W && updown == -128 && leftright == 0) {
+        return true;
+    } else if(keycode == KEY_S && updown == 128 && leftright == 0) {
+        return true;
+    } else if(keycode == KEY_D && updown == 0 && leftright == -128) {
+        return true;
+    } else if(keycode == KEY_A && updown == 0 && leftright == 128) {
+        return true;
+    }
     return false;
 }
 
@@ -192,7 +216,7 @@ stock IsVehicleRCHasGun(vehicleid) {
  */
 stock IsVehicleRC(vehicleid) {
     switch(GetVehicleModel(vehicleid)) {
-        case 564,441,465,501,464 : return true;
+        case 564,441,465,501,464,594 : return true;
     }
     return false;
 }
@@ -206,6 +230,7 @@ stock GetVehicleRCGunRate(vehicleid) {
         case 465,501    : return 700; // Heli 1,2 - Mahineguner
         case 441        : return 500; // RC Car - Defender
         case 464        : return 3500; // RC Plane - Sniper
+        case 594        : return 800;
     }
     return 0;
 }
@@ -219,6 +244,7 @@ stock Float:GetVehicleRCGunRange(vehicleid) {
         case 465,501    : return 40.0; // Heli 1,2
         case 441        : return 20.0; // RC Car
         case 464        : return 120.0; // RC Plane
+        case 594        : return 30.0;
     }
     return 0.0;
 }
@@ -232,6 +258,7 @@ stock GetVehicleRCGunBulletType(vehicleid) {
         case 465,501    : return 12; // Heli 1,2
         case 441        : return 12; // RC Car
         case 464        : return 11; // RC Plane (6,7 big)
+        case 594        : return 12;
     }
     return 0;
 }
@@ -245,6 +272,7 @@ stock Float:GetVehicleRCGunBulletSpeed(vehicleid) {
         case 465,501    : return 90.0; // Heli 1,2
         case 441        : return 80.0; // RC Car
         case 464        : return 120.0; // RC Plane
+        case 594        : return 80.0;
     }
     return 0.0;
 }
@@ -258,6 +286,7 @@ stock Float:GetVehicleRCGunBulletSize(vehicleid) {
         case 465,501    : return 1.2; // Heli 1,2
         case 441        : return 1.0; // RC Car
         case 464        : return 3.0; // RC Plane
+        case 594        : return 1.0;
     }
     return 0.0;
 }
@@ -271,6 +300,7 @@ stock Float:GetVehicleRCMaxHP(vehicleid) {
         case 465,501    : return 800.0; // Heli 1,2
         case 441        : return 900.0; // RC Car
         case 464        : return 700.0; // RC Plane
+        case 594        : return 800.0;
     }
     return 0.0;
 }
@@ -284,6 +314,7 @@ stock GetVehicleRCGunMaxAmmo(vehicleid) {
         case 465,501    : return 30; // Heli 1,2
         case 441        : return 30; // RC Car
         case 464        : return 20; // RC Plane
+        case 594        : return 25;
     }
     return 0;
 }
@@ -297,6 +328,7 @@ stock GetVehicleRCCostScores(vehicleid) {
         case 465,501    : return 100; // Heli 1,2
         case 441        : return 70; // RC Car
         case 464        : return 120; // RC Plane
+        case 594        : return 80;
     }
     return 0;
 }
@@ -304,7 +336,8 @@ stock GetVehicleRCCostScores(vehicleid) {
 /*
  * native CreateExplosionByPlayer(playerid, Float:x, Float:y, Float:z, type, Float:range, bool:damage_team = false);
  */
-stock CreateExplosionByPlayer(playerid, Float:x, Float:y, Float:z, type, Float:range, bool:damage_team = false) {
+forward CreateExplosionByPlayer(playerid, Float:x, Float:y, Float:z, type, Float:range, bool:damage_team);
+public CreateExplosionByPlayer(playerid, Float:x, Float:y, Float:z, type, Float:range, bool:damage_team) {
     // Custom damage for OnPlayerDeath()
     CreateExplosion(x, y, z, type, range);
     for (new p = GetPlayerPoolSize(); p >= 0; p--) {
@@ -363,7 +396,7 @@ stock ExplosionAllByPlayer(playerid, type=11, Float:range=1.0, bool:damage_team 
 public OnVehicleSpawn(vehicleid)
 {
     #if DEBUG_PRINT
-    printf("[CALLBACK:TW_rccars.inc] OnVehicleSpawn:\n\tvehicleid %d\n", vehicleid);
+    printf("[CALLBACK:"SCR_SOURCE"] OnVehicleSpawn:\n\tvehicleid %d\n", vehicleid);
     #endif
 
     if (IsVehicleRCHasGun(vehicleid)) {
@@ -484,7 +517,7 @@ public OnPlayerUpdate(playerid)
             vehicleid = GetPlayerVehicleID(playerid)
         ;
         if(vehicleid) {
-            if(IsVehicleRCHasGun(GetPlayerVehicleID(playerid)) && RCCAR_GetGun(vehicleid) && RCCAR_GetAmmo(vehicleid) > 0) {
+            if(IsVehicleRCHasGun(vehicleid) && RCCAR_GetGun(vehicleid)) {
                 static
                     delay[MAX_PLAYERS]
                 ;
@@ -492,8 +525,10 @@ public OnPlayerUpdate(playerid)
                     count = tickcount()
                 ;
                 if(delay[playerid] < count) {
+                    if ( RCCAR_GetAmmo(vehicleid) > 0) {
                     new
                         objectid,
+                        //targetid = INVALID_PLAYER_ID,
                         Float: x,
                         Float: y,
                         Float: z,
@@ -512,6 +547,11 @@ public OnPlayerUpdate(playerid)
                     rx = asin(vz);
 
                     GetVehiclePos(vehicleid, x, y, z);
+                    
+                    new soundid;
+                    if (GetVehicleModel(vehicleid) == 564) soundid = 14401;
+                    else soundid = 14402;
+                    PlaySoundInPoint(-1, soundid, x, y, z, GetVehicleRCGunRange(vehicleid));
 
                     #if ENABLE_SHOT_RANDOM_COLOR
                     // Nick change color with every shot by Logofero
@@ -528,8 +568,9 @@ public OnPlayerUpdate(playerid)
                             Float: tz
                         ;
                         rx = GetVehicleRCGunRange(vehicleid);
+
                         // Bullet magnet
-                        for(new i = GetPlayerPoolSize(); i >= 0; --i) {
+                        for (new i = GetPlayerPoolSize(); i >= 0; --i) {
                             if(IsPlayerInRangeOfPoint(i, rx, x, y, z) && i != playerid && GetPlayerTeam(playerid) != GetPlayerTeam(i)) {
                                 GetPlayerPos(i, tx, ty, tz);
 
@@ -546,10 +587,20 @@ public OnPlayerUpdate(playerid)
                                         rx = rz;
                                     }
                                 }
+                                //targetid = i;
                                 break;
                             }
                         }
-                        MoveObject(objectid, x + vx * rx, y + vy * rx, z + vz * rx, GetVehicleRCGunBulletSpeed(vehicleid));
+                        // Added in v5
+                        #if ENABLE_COLANDREAS
+                        if (CA_RayCastLine(x, y, z + 0.45, x + vx * rx, y + vy * rx, z + vz * rx, tx, ty, tz) && VectorSize(x-tx,y-ty,z-tz) < VectorSize(x-(x + vx * rx),y-(y + vy * rx),z-(z + vz * rx))) {
+                            MoveObject(objectid, tx, ty, tz, GetVehicleRCGunBulletSpeed(vehicleid));
+                        } else {
+                            MoveObject(objectid, x + vx * rx, y + vy * rx, z + vz * rx, GetVehicleRCGunBulletSpeed(vehicleid));
+                        }
+                        #endif
+                        // EOF Added in v5
+                        
                         //SetPlayerTime(playerid, 0, 0); // Offned for v3
 
                         // Added by Logofero in v4 ---------------------------------------------------
@@ -564,8 +615,20 @@ public OnPlayerUpdate(playerid)
                         RCCAR_SetAmmo(vehicleid, RCCAR_GetAmmo(vehicleid)-1);
                         if (RCCAR_GetAmmo(vehicleid) < 0) RCCAR_SetAmmo(vehicleid, 0);
                         // EOF Added by Logofero in v4 ---------------------------------------------------
+                   
                     }
-                }
+                    } else {
+                            new
+                              Float: x,
+                              Float: y,
+                              Float: z
+                            ;   
+                            GetVehiclePos(vehicleid, x, y, z);
+                            PlaySoundInPoint(-1, 36401, x, y, z, 10.0);
+                            delay[playerid] = count + GetVehicleRCGunRate(vehicleid);
+                
+                    }  
+                }         
             }
         }
         // EOF Version by Nero_3D ---------------------------------------------------
@@ -587,7 +650,7 @@ forward RCCAR_OnPlayerUpdate(playerid);
 public OnObjectMoved(objectid)
 {
     #if DEBUG_PRINT
-    printf("[CALLBACK:TW_rccars.inc] OnObjectMoved:\n\tobjectid %d\n\tshot_objectid %d\n\tshot_vehicleid %d\n\tshot_ownerid %d\n", objectid, gObjectInfo[objectid][OBJECTID], gObjectInfo[objectid][VEHICLEID], gObjectInfo[objectid][OWNERID]);
+    printf("[CALLBACK:"SCR_SOURCE"] OnObjectMoved:\n\tobjectid %d\n\tshot_objectid %d\n\tshot_vehicleid %d\n\tshot_ownerid %d\n", objectid, gObjectInfo[objectid][OBJECTID], gObjectInfo[objectid][VEHICLEID], gObjectInfo[objectid][OWNERID]);
     #endif
 
     // Version by NERO_3D ---------------------------------------------------
@@ -631,7 +694,7 @@ forward PutPlayerInVehicleRC(playerid, vehicleid, seatid);
 public PutPlayerInVehicleRC(playerid, vehicleid, seatid)
 {
     #if DEBUG_PRINT
-    printf("[CALLBACK:TW_rccars.inc] PutPlayerInVehicleRC:\n\tplayerid %d\n\tvehicleid %d\n\tseatid %d\n", playerid, vehicleid, seatid);
+    printf("[CALLBACK:"SCR_SOURCE"] PutPlayerInVehicleRC:\n\tplayerid %d\n\tvehicleid %d\n\tseatid %d\n", playerid, vehicleid, seatid);
     #endif
 
     PutPlayerInVehicle(playerid, vehicleid, seatid);

@@ -1,0 +1,3 @@
+Path:TW_maps/abase.txt;
+Path:TW_maps/desertbases.txt;
+Path:TW_maps/ghostcity.txt;
