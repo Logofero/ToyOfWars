@@ -1,6 +1,6 @@
 ### Gamemode: Toy Of Wars
 
-![Toy Of Wars v3](https://github.com/Logofero/ToyOfWars/blob/master/screens/Map2.jpg)
+![Toy Of Wars v3](https://github.com/Logofero/ToyOfWars/blob/master/screens/TW%20v3%20%282%29.jpg)
 
 #### Server:  
 
@@ -34,10 +34,17 @@ v3, 31 oct 2015
  
 #### Credits:
 
-   SA-MP Team [SA-MP Multyplayer](http://forum.sa-mp.com/forumdisplay.php?f=74)
-   Zamaroht [Zamaroht's TextDraw Editor](http://forum.sa-mp.com/member.php?u=5955)
-   Incognito [Streamer](http://forum.sa-mp.com/showthread.php?t=102865)
-   [uL]Slice, [uL]Chris420, [uL]Pottus, uint32, Crayder [ColAndreas](http://forum.sa-mp.com/showthread.php?t=586068)
+#### SA-MP Multyplayer 
+[SA-MP Team](http://forum.sa-mp.com/forumdisplay.php?f=74)
+
+#### Zamaroht's TextDraw Editor 
+[Zamaroht](http://forum.sa-mp.com/member.php?u=5955)
+
+#### Streamer 
+[Incognito](http://forum.sa-mp.com/showthread.php?t=102865)
+
+#### ColAndreas 
+[[uL]Slice, [uL]Chris420, [uL]Pottus, uint32, Crayder](http://forum.sa-mp.com/showthread.php?t=586068)
 
 #### General tread:
 
@@ -49,7 +56,7 @@ _You have to fight on a toy cars against other teams._
 
 #### History changes:
 
-_Look in the file CHANGES_
+_Look in the file [CHANGES](https://github.com/Logofero/ToyOfWars/blob/master/CHANGES)_
 
 __[Screenshots](https://github.com/Logofero/ToyOfWars/blob/master/screens)__
 ###[Downloads](https://github.com/Logofero/ToyOfWars/releases)
