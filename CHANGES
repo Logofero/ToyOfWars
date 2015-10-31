@@ -1,0 +1,116 @@
+ 
+ 
+    History changes Toy Of Wars:
+    
+        Version 1:  
+        
+            Beta version: No score, no teams, no bonus.
+            + Added control rctigergun.inc:
+                Fire - Shot of RCgun
+                Enter - Enter/Exit RC cars
+    
+        Version 2:
+ 
+            + Fixed:
+                A player could sit in hot or explode vehicles and teleport out of the map. Now you can not entering RC car when it is burning.
+                When a player dies in RC Model, the camera is reset and returned to the place of boarding the vehicle. Now the camera is fixed on vehicle exploded.
+           
+            - Rename rctigergun.inc to TW_rccars.inc
+           
+            + Added teams:
+                1 Red Team
+                2 Green
+                3 Blue
+                4 Purple
+                5 Yellow
+                6 White
+                
+            + Added health system:
+                RCTiger         1200 hp
+                RCBandit       900 hp
+                RCRaider       800 hp
+                RCGoblin       800 hp
+                RCBaron        700 hp
+                
+            + Added ammo system:
+                RCTiger         25 bullets
+                RCBandit       30 bullets
+                RCRaider       30 bullets
+                RCGoblin       30 bullets
+                RCBaron        20 bullets
+                
+            + Added score system
+                Humen           50 score
+                RCTiger         90 score
+                RCBandit       70 score
+                RCRaider       100 score
+                RCGoblin       100 score
+                RCBaron        120 score
+                
+            + Added static maps:
+                1. Abandoned base v1
+                2. Abandoned base v2
+                
+            + Added toy interface TW_hud.inc:
+                General bar
+                Team list
+                Health bar
+                Ammo bar
+                RC icon 
+                Window wins   
+                Alert messange
+                
+            + Added commands:
+                /team [ID] - change team
+                /map [ID] - change map
+                /boom [player ID] - explode player
+                /tank - create RCTiger
+                
+            + Added bonuses:
+                Repair kit - add vehicle health
+                Multi speed - multiplies speed
+                Ammo - add bullets
+                Atom Bomb - explode all enemies
+                Freeze Bomb - freezes all enemies in a specified time
+                Napalm Bomb - sets fire to all enemies
+                Gravity Bomb - changing times gravity
+                
+            Note:
+                (!) Projectiles fly through the comrades, but they still inflict damage if an explosion near.
+                (~) Since I tested it on one player - there may be bugs with more players.
+                    If something is not working, please report as possible will be fixed in the next update.
+    
+        Version 3:
+    
+            Status:
+                Completed. I do not plan to release updates: No personal motivation, no time, no desire, no feedback.
+            
+            Bugs:
+                - I was unable to find the reason for which the pickups are sometimes many times in one place or has not been created. Perhaps the reason SetTimerEx timer that is used to re-create a pickup. Who knows why fix.
+                - If the new map will contain less than the previous teams, the players will not be visible in the list of 'Team Score'. I wanted to fix it, but did not.
+                - I could not find a good way to recover deleted objects. For this, try not to remove the ground to avoid the holes.
+                
+            - Removed Command /tank - create RCTiger
+            - Reanme TW_hud.inc to TW_gui.inc
+            + Refactoring code:
+                TW_func.inc
+                TW_gui.inc
+            + Added new includes:
+                common.inc
+                PFCMD.inc
+            + Change font color for map description in TW_gui.inc.
+            + Change window victorious, and now it shows all the points scored and the teams ranks. Grades do not mean anything - it's just an additional reward for the number of wins in the round.
+            + Added sound. When the player selects the pickup when the cartridges run out audible click and when the round ends with a winning melody plays.
+            + Now bonuses are seen on the radar as icons.
+            + Added plugin Streamer it allows you to manage dynamic objects.
+            + Added plugin ColAndreas to him, now the shells explode in a collision with objects rather than pass through them as all pickups are relative to the ground - before the pick-up can appear under the ground.
+            + Added a new bonus "Air Strike" The player picked it may cause a surgical strike on the ground.
+            + Added command for admins /air - air strike
+            + Added 'Map loader' file at the same time change the system resources are now the owner of a server can add to the map their teams, now they are not limited to the 6th, you can select the name, color skins. All resources maps and dynamic loading after the start of the map. Note: If the map has been removed objects by changing the location they will not appear.   
+            + Added new folder scriptfiles\TW_maps
+            + Changes map abase.txt "Abadone base" v2 
+            + Added map list scriptfiles\TW_maps\maps.txt
+            + Added dynamic maps:
+                desertbases.txt "Desert bases" v1
+                ghostcity.txt "Ghost City" v1
+                
