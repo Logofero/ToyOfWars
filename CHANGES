@@ -129,4 +129,7 @@
             + Added ColAndreas file 
                 scriptfiles\colandreas\ColAndreas.cadb
             + Added server config server.cfg
+            + Added includes:
+                colandreas.inc
+                streamer.inc
                          
