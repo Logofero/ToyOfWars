@@ -3,7 +3,7 @@
  * Mode         : TDM
  * Map          : Custom locations
  * Release      : v1, 8 aug 2015
- * Updated      : v3, 31 oct 2015
+ * Updated      : v3e1, 2 nov 2015
  * Status       : Complited
  * Contributors : VanillaRain, Nero_3D, Logofero aka fERO
  * Credits:
@@ -38,9 +38,9 @@
 #endif
 #define SCR_SOURCE              "TW_func.inc"
 #define SCR_NAME                "Toy of Wars"
-#define SCR_VER                 "v3"
+#define SCR_VER                 "v3e1"
 #define SCR_REL                 "v1, 8 aug 2015"
-#define SCR_UPD                 "v3, 31 oct 2015"
+#define SCR_UPD                 "v3e1, 2 nov 2015"
 #define SCR_CONTRIBUTORS        "VanillaRain, Nero_3D, Logofero"
 #define SCR_URL                 "http://forum.sa-mp.com/showthread.php?t=584939"
 #define SCR_URL2                "http://forum.sa-mp.com"
@@ -152,6 +152,7 @@ main() {
     #if ENABLE_GAMEINFO
     timer_modeinfo = SetTimer("OnModeInfo", 1000, 1);
     #endif
+    
 }
 
 public OnGameModeInit()
@@ -307,19 +308,16 @@ public OnPlayerRequestClass(playerid, classid)
 
     // Pass class selector (Fast spawn - no button)
     teamid = GetPlayerTeam(playerid); //GetTeamColorIDOfColor(GetPlayerColor(playerid));
-    //printf("[DEBUG] teamid %d", teamid);
 
     SetPlayerVirtualWorld(playerid, map_spawns[teamid][WORLDID]);
     SetPlayerInterior(playerid, map_spawns[teamid][INTERIORID]);
     //printf("playerid %d team %d skin %d", playerid, teamid, map_spawns[teamid][SKIN]);
     new skinid = TW_GetTeamSkin(teamid, random( TW_GetTeamMaxSkins(teamid) ) );
-    //printf("[DEBUG] team %d/%d max skins %d skin %d", teamid, TW_GetMapTeams(), TW_GetTeamMaxSkins(teamid), skinid);
 
     new index = random(map_info[MAX_SPAWNS]);
     while (map_spawns[index][TEAMID] != teamid && map_spawns[index][TEAMID] != -1) {
         index = random(map_info[MAX_SPAWNS]);
     }
-    printf("[DEBUG] index %d teamid %d", index, map_spawns[index][TEAMID]);
     SetSpawnInfo(playerid, teamid, skinid, map_spawns[index][X], map_spawns[index][Y], map_spawns[index][Z], map_spawns[index][ANGLE], 0, 0, 0, 0, 0, 0);
     SpawnPlayer(playerid);
     return 1;
@@ -746,153 +744,6 @@ public OnPlayerCommandText(playerid, cmdtext[])
 }
 
 /*
-public OnPlayerPickUpPickup(playerid, pickupid)
-{
-    #if DEBUG_PRINT
-    printf("[CALLBACK:"SCR_SOURCE"] OnPlayerPickUpPickup:\n\tplayerid %d\n\tpickupid %d\n", playerid, pickupid);
-    #endif
-
-    for (new i; i < MAX_BONUS; i++) {
-        if (pickup_bonus[i][ID] != 65535 && pickup_bonus[i][ID] == pickupid && GetPlayerInterior(playerid) == pickup_bonus[i][INTERIORID]) {
-            new vehicleid = GetPlayerVehicleID(playerid);
-            if (vehicleid) {
-                new
-                    Float:x,
-                    Float:y,
-                    Float:z
-                ;
-                switch (pickup_bonus[i][TYPE]) {
-                    case 0 : {
-                        new
-                            Float: hp
-                        ;
-                        GetVehicleHealth(vehicleid, hp);
-                        RepairVehicle(vehicleid); // Repairs the damage model and resets the health
-                        if (RCCAR_GetMaxHP(vehicleid) > 0.0 && hp+pickup_bonus[i][AMOUNT] >= RCCAR_GetMaxHP(vehicleid)) SetVehicleHealth(vehicleid, RCCAR_GetMaxHP(vehicleid));
-                        else SetVehicleHealth(vehicleid, hp+pickup_bonus[i][AMOUNT]);
-
-                        new msg[256];
-                        format(msg, sizeof(msg), "{00FF00}[ Used Health Kit +%.0f hp... ]",  pickup_bonus[i][AMOUNT]);
-                        SetPlayerChatBubble(playerid, msg, COLOR_BONUS, 60.0, 4500);
-
-                        #if SHOW_ALL_BONUS_MSG
-                        new name[MAX_PLAYER_NAME];
-                        GetPlayerName(playerid, name, sizeof(name));
-                        format(msg, sizeof(msg), "{00FF00}* %s(%d) pickuped health kit +%.0f hp", name, playerid, pickup_bonus[i][AMOUNT]);
-                        SendClientMessageToAll(-1, msg);
-                        #endif
-                    } case 1 : {
-                        //GetPlayerPos(playerid, x, y, z);
-                        //GetVehicleZAngle(vehicleid, a);
-                        GetVehicleVelocity(vehicleid, x, y, z);
-                        SetVehicleVelocity(vehicleid, x * pickup_bonus[i][AMOUNT], y * pickup_bonus[i][AMOUNT], z * pickup_bonus[i][AMOUNT]);
-                        //SetVehicleAngularVelocity(vehicleid, x * multnitro, y * multnitro, z);
-
-                        new msg[256];
-                        format(msg, sizeof(msg), "{FF8080}[ Used Multi Speed x%.1f... ]",  pickup_bonus[i][AMOUNT]);
-                        SetPlayerChatBubble(playerid, msg, COLOR_BONUS, 60.0, 4500);
-
-                        #if SHOW_ALL_BONUS_MSG
-                        new name[MAX_PLAYER_NAME];
-                        GetPlayerName(playerid, name, sizeof(name));
-                        format(msg, sizeof(msg), "{FF8080}* %s(%d) pickuped multi speed x%.1f", name, playerid, pickup_bonus[i][AMOUNT]);
-                        SendClientMessageToAll(-1, msg);
-                        #endif
-                    } case 2 : {
-                        if (RCCAR_GetAmmo(vehicleid)+floatround(pickup_bonus[i][AMOUNT]) <= RCCAR_GetMaxAmmo(vehicleid)) RCCAR_SetAmmo(vehicleid, RCCAR_GetAmmo(vehicleid) + floatround(pickup_bonus[i][AMOUNT]));
-                        else RCCAR_SetAmmo(vehicleid, RCCAR_GetMaxAmmo(vehicleid));
-
-                        new msg[256];
-                        format(msg, sizeof(msg), "{AAAAAA}[ Used Ammo +%.0f... ]",  pickup_bonus[i][AMOUNT]);
-                        SetPlayerChatBubble(playerid, msg, COLOR_BONUS, 60.0, 4500);
-
-                        #if SHOW_ALL_BONUS_MSG
-                        new name[MAX_PLAYER_NAME];
-                        GetPlayerName(playerid, name, sizeof(name));
-                        format(msg, sizeof(msg), "{AAAAAA}* %s(%d) pickuped ammo +%.0f", name, playerid, pickup_bonus[i][AMOUNT]);
-                        SendClientMessageToAll(-1, msg);
-                        #endif
-                    } case 3 : {
-                        ExplosionAllByPlayer(playerid, 11, pickup_bonus[i][AMOUNT], false);
-
-                        new msg[256];
-                        SetPlayerChatBubble(playerid, "{FFFFFF}[ Used Atom Bomb... ]", COLOR_BONUS, 60.0, 4500);
-
-                        #if SHOW_ALL_BONUS_MSG
-                        new name[MAX_PLAYER_NAME];
-                        GetPlayerName(playerid, name, sizeof(name));
-                        format(msg, sizeof(msg), "{FFFFFF}* %s(%d) pickuped Atom Bomb", name, playerid);
-                        SendClientMessageToAll(-1, msg);
-                        #endif
-                    } case 4 : {
-                        ExplosionAllByPlayer(playerid, 1, pickup_bonus[i][AMOUNT], false);
-
-                        new msg[256];
-                        SetPlayerChatBubble(playerid, "{FFFF80}[ Used Napalm Bomb... ]", COLOR_BONUS, 60.0, 4500);
-
-                        #if SHOW_ALL_BONUS_MSG
-                        new name[MAX_PLAYER_NAME];
-                        GetPlayerName(playerid, name, sizeof(name));
-                        format(msg, sizeof(msg), "{FFFF80}* %s(%d) pickuped Napalm Bomb", name, playerid);
-                        SendClientMessageToAll(-1, msg);
-                        #endif
-                    } case 5 : {
-                        for (new v = GetVehiclePoolSize(); v >= 1; --v) {
-                            if (v != GetPlayerVehicleID(playerid)) {
-                                SetVehicleEngine(v, 0);
-                                RCCAR_SetGun(v, 0);
-                                SetTimerEx("OnVechileEngine", floatround(pickup_bonus[i][AMOUNT]), 0, "ii", v, 1);
-                            }
-                        }
-                        new msg[256];
-                        SetPlayerChatBubble(playerid, "{33CCFF}[ Used Freeze Bomb... ]", COLOR_BONUS, 60.0, 4500);
-
-                        #if SHOW_ALL_BONUS_MSG
-                        new name[MAX_PLAYER_NAME];
-                        GetPlayerName(playerid, name, sizeof(name));
-                        format(msg, sizeof(msg), "{33CCFF}* %s(%d) pickuped Freeze Bomb %.1f sec", name, playerid, pickup_bonus[i][AMOUNT] / 1000.0);
-                        SendClientMessageToAll(-1, msg);
-                        #endif
-                    } case 6 : {
-                        OnMapGravity(pickup_bonus[i][AMOUNT]);
-                        SetTimerEx("OnMapGravity", TIME_RESTART_GRAVITY, 0, "f", TW_GetMapGravity());
-
-                        new msg[256];
-                        SetPlayerChatBubble(playerid, "{DDCCFF}[ Used Gravity Bomb... ]", COLOR_BONUS, 60.0, 4500);
-
-                        #if SHOW_ALL_BONUS_MSG
-                        new name[MAX_PLAYER_NAME];
-                        GetPlayerName(playerid, name, sizeof(name));
-                        format(msg, sizeof(msg), "{DDCCFF}* %s(%d) pickuped Gravity Bomb %.4f", name, playerid, pickup_bonus[i][AMOUNT]);
-                        SendClientMessageToAll(-1, msg);
-                        #endif
-                    }
-                }
-                SetTimerEx("OnBonusRespawn", pickup_bonus[i][RESPAWN_TIME], false, "i", i);
-                if (pickup_bonus[i][TEXTID] != Text3D:INVALID_3DTEXT_ID) {
-                    Delete3DTextLabel(pickup_bonus[i][TEXTID]);
-                    pickup_bonus[i][TEXTID] = Text3D:INVALID_3DTEXT_ID;
-                }
-                DestroyPickup(pickupid);
-                pickup_bonus[i][ID] = 65535;
-                pickup_bonus[i][SPAWN_RANGE] = 0.0;
-                pickup_bonus[i][RESPAWN_TIME] = 0;
-                pickup_bonus[i][AMOUNT] = 0.0;
-                bonus_limit[pickup_bonus[i][TYPE]]--;
-                if (bonus_limit[pickup_bonus[i][TYPE]] < 0) {
-                    bonus_limit[pickup_bonus[i][TYPE]] = 0;
-                }
-                pickup_bonus[i][TYPE] = -1;
-                return 1;
-            }
-            break;
-        }
-    }
-    return 1;
-}
-*/
-
-/*
 public OnPlayerTakeDamage(playerid, issuerid, Float:amount, weaponid, bodypart)
 {
     #if DEBUG_PRINT
@@ -972,10 +823,27 @@ public OnStartRound()
     }
     //TW_GetMapIndex() = current_mapid;
     TW_GetMapMax() = maps;
+    TW_GetMapOldTeams() = TW_GetMapTeams();
     TW_LoadMap(TW_GetMapPathFromIndex(TW_GetMapIndex()));
     TW_BuildMap();
     TW_ShowHudTeamList();
     TW_ShowHudMapInfo();
+    // Reset all teams if current team more > max teams
+    new 
+        teamid,
+        skinid
+    ;
+    //printf("old max teams %d, new max teams %d", TW_GetMapOldTeams(), TW_GetMapTeams());
+    if (TW_GetMapOldTeams() != TW_GetMapTeams()) {
+        //printf("Reset all teams if current team more > max teams");
+        for (new p = GetPlayerPoolSize(); p >= 0; --p) {
+            teamid = random( TW_GetMapTeams() );
+            skinid = TW_GetTeamSkin(teamid, random( TW_GetTeamMaxSkins(teamid) ) );
+            SetPlayerTeam(p, teamid);
+            SetPlayerColor(p, TW_GetTeamColor(teamid));
+            SetSpawnInfo(p, teamid, skinid, map_spawns[teamid][X], map_spawns[teamid][Y], map_spawns[teamid][Z], map_spawns[teamid][ANGLE], 0, 0, 0, 0, 0, 0);
+        }
+    }       
     RespawnPlayers();
     format(msg, sizeof(msg),"~r~]]] New Round ]]]~n~~y~Map: ~w~%s~n~~y~RoundScores: ~w~%d", map_info[NAME], map_info[ROUND_SCORE]);
     GameTextForAll(msg, 5000, 5);

@@ -28,6 +28,7 @@
 #define SCR_SOURCE                                  "TW_func.inc"
 #define TW_FUNC_DEBUG_PRINT                         (0)
 #define TW_FUNC_DEBUG_PRINT_LOW                     (0)
+#define TW_FUNC_DEBUG_MAP                           (1)
 
 // Defineds
 #define TW_TIME_NEW_ROUND           (20000)
@@ -338,7 +339,7 @@ new p_airstrike[MAX_PLAYERS][E_P_AIRS];
 // Global vars
 new game_winner;
 new game_state;
-new game_teams;
+new game_teams[2];
 //new current_mapid;
 
 // Macro-functions
@@ -366,7 +367,8 @@ new game_teams;
 #define TW_GetMapMax()                              map_info[MAPS]
 #define TW_GetMapPathFromIndex(%1)                  map_list[%1]
 #define TW_GetMapTeamWinner()                       game_winner
-#define TW_GetMapTeams()                            game_teams
+#define TW_GetMapTeams()                            game_teams[0]
+#define TW_GetMapOldTeams()                         game_teams[1]
 #define TW_GetMapState()                            game_state
 
 #define TW_GetTeamName(%1)                          TW_team_info[%1][NAME]
@@ -1680,7 +1682,7 @@ stock TW_LoadMap(const filename[])
         TW_GetTeamSkin(5,0) = 100;      
     }
 	
-	#if TW_FUNC_DEBUG_PRINT
+	#if TW_FUNC_DEBUG_MAP
     printf("\n-------------------------------------------------------------------------------\n\n\tMap '%s' loaded.\n\tName '%s'\n\tVersion %s\n\tSize %.4f,%.4f,%.4f, %.4f,%.4f,%.4f\n\tRoundScore %d\n\tTime %02d:%02d\n\tWeather %s (%d)\n\tGravity %.6f\n\tInterior %d\n\tWorld %d\n\tRemovedBuildings %d/%d\n\tObjects %d/%d\n\tPickups %d/%d\n\tVehicles %d/%d\n\tSpawns %d/%d\n\tTeams %d/%d\n\tAuthor %s\n\n-------------------------------------------------------------------------------\n",
         filename,
         map_info[NAME],
