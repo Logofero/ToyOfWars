@@ -91,7 +91,7 @@
                 - I could not find a good way to recover deleted objects. For this, try not to remove the ground to avoid the holes.
                 
             - Removed Command /tank - create RCTiger
-            - Reanme TW_hud.inc to TW_gui.inc
+            - Rename TW_hud.inc to TW_gui.inc
             + Refactoring code:
                 TW_func.inc
                 TW_gui.inc
@@ -113,4 +113,20 @@
             + Added dynamic maps:
                 desertbases.txt "Desert bases" v1
                 ghostcity.txt "Ghost City" v1
-                
+ 
+        Version 3 edition 1:
+    
+            Fixed minor bugs.
+            + Fixed If a new map teams less than the previous one, the team did not show up in the 'Team Score'.
+            + Fixed map "Abadone base". Replaced static deleted objects on dynamic. This is done so that the map did not have holes.
+            + Changed map "Desert bases" made the first level.
+            + Added plugins dll:
+                streamer.so
+                streamer.dll
+                ColAndreas_static.so
+                ColAndreas.so
+                ColAndreas.dll
+            + Added ColAndreas file 
+                scriptfiles\colandreas\ColAndreas.cadb
+            + Added server config server.cfg
+                         

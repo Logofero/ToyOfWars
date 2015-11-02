@@ -1,6 +1,6 @@
 ### Gamemode: Toy Of Wars
 
-![Toy Of Wars v3](https://github.com/Logofero/ToyOfWars/blob/master/screens/TW%20v3%20%282%29.jpg)
+![Toy Of Wars v3e1](https://github.com/Logofero/ToyOfWars/blob/master/screens/TW%20v3%20%282%29.jpg)
 
 #### Server:  
 
@@ -24,7 +24,7 @@ v1, 8 aug 2015
 
 #### Update: 
 
-v3, 31 oct 2015
+v3e1, 2 nov 2015
 
 #### Contributors: 
 
